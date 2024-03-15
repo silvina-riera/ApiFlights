@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/flights")
@@ -20,7 +21,7 @@ public class FlightsController {
     }
 
     @GetMapping(value = "/{id}")
-    public Flights getFlightById(@PathVariable Long id){
+    public Optional<Flights> getFlightById(@PathVariable Long id){
         return flightsService.getFlightById(id);
     }
 
