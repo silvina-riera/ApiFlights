@@ -26,6 +26,7 @@ public class FlightsController {
         return flightsService.getFlightById(id);
     }
 
+    @CrossOrigin
     @PostMapping(value = "/create")
     public void createFlight(@RequestBody Flights flight){
         flightsService.createFlight(flight);

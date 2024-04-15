@@ -15,6 +15,7 @@ public class CompaniesController {
     @Autowired
     CompaniesService companiesService;
 
+    @CrossOrigin
     @GetMapping(value = "/view")
     public List<Companies> getCompanies(){
         return companiesService.getCompanies();
