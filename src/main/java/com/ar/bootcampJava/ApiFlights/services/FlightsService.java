@@ -1,13 +1,18 @@
 package com.ar.bootcampJava.ApiFlights.services;
 
+import com.ar.bootcampJava.ApiFlights.configuration.FlightsConfiguration;
 import com.ar.bootcampJava.ApiFlights.exceptions.FlightNotExistsException;
+import com.ar.bootcampJava.ApiFlights.models.Companies;
+import com.ar.bootcampJava.ApiFlights.models.Dolar;
+import com.ar.bootcampJava.ApiFlights.models.FlightsDto;
 import com.ar.bootcampJava.ApiFlights.repositories.FlightsRepository;
 import com.ar.bootcampJava.ApiFlights.models.Flights;
+import com.ar.bootcampJava.ApiFlights.utils.FlightsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FlightsService {
@@ -15,16 +20,26 @@ public class FlightsService {
     @Autowired
     FlightsRepository flightsRepository;
 
-    public List<Flights> getFlights() {
-        return flightsRepository.findAll();
+    @Autowired
+    FlightsUtils flightsUtils;
+
+    @Autowired
+    FlightsConfiguration flightsConfiguration;
+
+    public List<FlightsDto> getFlights() {
+        List<Flights> flightsList = flightsRepository.findAll();
+        return flightsDtoCollector(flightsList);
     }
 
     public void createFlight(Flights flight) {
         flightsRepository.save(flight);
     }
 
-    public Optional<Flights> getFlightById(Long id) {
-        return flightsRepository.findById(id);
+
+    public FlightsDto getFlightById(Long id){
+        Flights flight = flightsRepository.findById(id).orElseThrow(() ->
+                new FlightNotExistsException("El vuelo elegido no existe"));
+        return flightsUtils.flightsMapper(flight,getDolar());
     }
 
     public String deleteFlight(Long id){
@@ -71,5 +86,32 @@ public class FlightsService {
         }
 
         return null;
+    }
+
+    public  List<FlightsDto> getByOriginAndDestination(String origin, String destination){
+        List<Flights> flightsList = flightsRepository.findByOriginAndDestination(origin, destination);
+        return flightsDtoCollector(flightsList);
+    }
+
+    public  List<FlightsDto> getByCompany(Companies company_id){
+        List<Flights> flightsList = flightsRepository.findByCompany(company_id);
+        return flightsDtoCollector(flightsList);
+    }
+
+    public List<FlightsDto> findOffers(Double offerPrice){
+        List<Flights> flightsList = flightsRepository.findAll();
+        List<Flights> flightsOffer = flightsUtils.findOffers(flightsList, offerPrice);
+        return flightsDtoCollector(flightsOffer);
+    }
+
+    private double getDolar() {
+        Dolar dolar = flightsConfiguration.fetchDolar();
+        return dolar.getAverage();
+    }
+
+    private List<FlightsDto> flightsDtoCollector(List<Flights> flightsList) {
+        return flightsList.stream()
+                .map(flight -> flightsUtils.flightsMapper(flight,getDolar()))
+                .collect(Collectors.toList());
     }
 }

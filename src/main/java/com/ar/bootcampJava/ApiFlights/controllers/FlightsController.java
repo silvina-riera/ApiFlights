@@ -1,12 +1,13 @@
 package com.ar.bootcampJava.ApiFlights.controllers;
 
+import com.ar.bootcampJava.ApiFlights.models.Companies;
 import com.ar.bootcampJava.ApiFlights.models.Flights;
+import com.ar.bootcampJava.ApiFlights.models.FlightsDto;
 import com.ar.bootcampJava.ApiFlights.services.FlightsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/flights")
@@ -15,29 +16,43 @@ public class FlightsController {
     @Autowired
     FlightsService flightsService;
 
-    @GetMapping
-    public List<Flights> getFlights(){
+    @GetMapping(value = "/view")
+    public List<FlightsDto> getFlights(){
         return flightsService.getFlights();
     }
 
-    @GetMapping(value = "/{id}")
-    public Optional<Flights> getFlightById(@PathVariable Long id){
+    @GetMapping(value = "/search/{id}")
+    public FlightsDto getFlightById(@PathVariable Long id){
         return flightsService.getFlightById(id);
     }
 
-    @PostMapping
+    @PostMapping(value = "/create")
     public void createFlight(@RequestBody Flights flight){
         flightsService.createFlight(flight);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/update/{id}")
     public Flights updateFlight(@PathVariable Long id, @RequestBody Flights flight){
         return flightsService.updateFlight(id, flight);
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping(value = "/delete/{id}")
     public void deleteFlight(@PathVariable Long id){
-
         flightsService.deleteFlight(id);
+    }
+
+    @GetMapping("/search/offers")
+    public List<FlightsDto> getOffers(){
+        Double offerPrice = 800.0;
+        return  flightsService.findOffers(offerPrice);
+    }
+
+    @GetMapping("search/trip")
+    public List<FlightsDto> getFlightsByTrip(@RequestParam String origin, @RequestParam String destination) {
+        return flightsService.getByOriginAndDestination(origin, destination);
+    }
+    @GetMapping("search/byCompany/{company_id}")
+    public List<FlightsDto> getFlightsByCompany(@PathVariable Companies company_id) {
+        return flightsService.getByCompany(company_id);
     }
 }
