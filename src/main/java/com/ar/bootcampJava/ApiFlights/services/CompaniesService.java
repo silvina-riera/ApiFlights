@@ -1,6 +1,6 @@
 package com.ar.bootcampJava.ApiFlights.services;
 
-import com.ar.bootcampJava.ApiFlights.exceptions.CompanyNotExistsException;
+import com.ar.bootcampJava.ApiFlights.exceptions.ResourceNotExistsException;
 import com.ar.bootcampJava.ApiFlights.models.Companies;
 import com.ar.bootcampJava.ApiFlights.repositories.CompaniesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class CompaniesService {
             companiesRepository.deleteById(id);
             return "La compania con id: " + id + " ha sido eliminada";
         } else {
-            throw new CompanyNotExistsException("La compania a eliminar elegida no existe");
+            throw new ResourceNotExistsException("La compania a eliminar elegida no existe");
         }
 
     }

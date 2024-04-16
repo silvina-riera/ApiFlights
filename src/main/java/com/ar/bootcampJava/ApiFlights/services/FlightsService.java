@@ -1,7 +1,7 @@
 package com.ar.bootcampJava.ApiFlights.services;
 
 import com.ar.bootcampJava.ApiFlights.configuration.FlightsConfiguration;
-import com.ar.bootcampJava.ApiFlights.exceptions.FlightNotExistsException;
+import com.ar.bootcampJava.ApiFlights.exceptions.ResourceNotExistsException;
 import com.ar.bootcampJava.ApiFlights.models.Companies;
 import com.ar.bootcampJava.ApiFlights.models.Dolar;
 import com.ar.bootcampJava.ApiFlights.models.FlightsDto;
@@ -38,7 +38,7 @@ public class FlightsService {
 
     public FlightsDto getFlightById(Long id){
         Flights flight = flightsRepository.findById(id).orElseThrow(() ->
-                new FlightNotExistsException("El vuelo elegido no existe"));
+                new ResourceNotExistsException("El vuelo elegido no existe"));
         return flightsUtils.flightsMapper(flight,getDolar());
     }
 
@@ -47,7 +47,7 @@ public class FlightsService {
             flightsRepository.deleteById(id);
             return "El vuelo con id: " + id + " ha sido eliminado";
         } else {
-            throw new FlightNotExistsException("El vuelo a eliminar elegido no existe");
+            throw new ResourceNotExistsException("El vuelo a eliminar elegido no existe");
         }
 
     }
@@ -78,6 +78,10 @@ public class FlightsService {
 
             if (flight.getFrequence() != null){
                 flightToModify.setFrequence(flight.getFrequence());
+            }
+
+            if (flight.getCompany() != null){
+                flightToModify.setCompany(flight.getCompany());
             }
 
             Flights flightModified = flightsRepository.save(flightToModify);
