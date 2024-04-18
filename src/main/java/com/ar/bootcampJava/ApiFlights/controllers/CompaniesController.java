@@ -2,7 +2,9 @@ package com.ar.bootcampJava.ApiFlights.controllers;
 
 import com.ar.bootcampJava.ApiFlights.models.Companies;
 import com.ar.bootcampJava.ApiFlights.services.CompaniesService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/companies")
+@Validated
 public class CompaniesController {
 
     @Autowired
@@ -27,7 +30,7 @@ public class CompaniesController {
     }
 
     @PostMapping(value = "/create")
-    public void createCompany(@RequestBody Companies company){
+    public void createCompany(@Valid @RequestBody Companies company){
         companiesService.createCompany(company);
     }
 

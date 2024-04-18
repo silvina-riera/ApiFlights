@@ -9,6 +9,7 @@ import com.ar.bootcampJava.ApiFlights.repositories.FlightsRepository;
 import com.ar.bootcampJava.ApiFlights.models.Flights;
 import com.ar.bootcampJava.ApiFlights.utils.FlightsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,10 +32,7 @@ public class FlightsService {
         return flightsDtoCollector(flightsList);
     }
 
-    public void createFlight(Flights flight) {
-        flightsRepository.save(flight);
-    }
-
+    public void createFlight(Flights flight) { flightsRepository.save(flight);}
 
     public FlightsDto getFlightById(Long id){
         Flights flight = flightsRepository.findById(id).orElseThrow(() ->
