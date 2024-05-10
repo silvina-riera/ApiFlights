@@ -9,7 +9,6 @@ import com.ar.bootcampJava.ApiFlights.repositories.FlightsRepository;
 import com.ar.bootcampJava.ApiFlights.models.Flights;
 import com.ar.bootcampJava.ApiFlights.utils.FlightsUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
