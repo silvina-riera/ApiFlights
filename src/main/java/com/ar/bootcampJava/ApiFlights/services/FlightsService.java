@@ -3,7 +3,7 @@ package com.ar.bootcampJava.ApiFlights.services;
 import com.ar.bootcampJava.ApiFlights.configuration.FlightsConfiguration;
 import com.ar.bootcampJava.ApiFlights.exceptions.ResourceNotExistsException;
 import com.ar.bootcampJava.ApiFlights.models.Companies;
-import com.ar.bootcampJava.ApiFlights.models.Dolar;
+import com.ar.bootcampJava.ApiFlights.models.Dollar;
 import com.ar.bootcampJava.ApiFlights.models.FlightsDto;
 import com.ar.bootcampJava.ApiFlights.repositories.FlightsRepository;
 import com.ar.bootcampJava.ApiFlights.models.Flights;
@@ -36,7 +36,7 @@ public class FlightsService {
     public FlightsDto getFlightById(Long id){
         Flights flight = flightsRepository.findById(id).orElseThrow(() ->
                 new ResourceNotExistsException("El vuelo elegido no existe"));
-        return flightsUtils.flightsMapper(flight,getDolar());
+        return flightsUtils.flightsMapper(flight,getDollar());
     }
 
     public String deleteFlight(Long id){
@@ -105,14 +105,14 @@ public class FlightsService {
         return flightsDtoCollector(flightsOffer);
     }
 
-    private double getDolar() {
-        Dolar dolar = flightsConfiguration.fetchDolar();
-        return dolar.getAverage();
+    private double getDollar() {
+        Dollar dollar = flightsConfiguration.fetchDollar();
+        return dollar.getAverage();
     }
 
     private List<FlightsDto> flightsDtoCollector(List<Flights> flightsList) {
         return flightsList.stream()
-                .map(flight -> flightsUtils.flightsMapper(flight,getDolar()))
+                .map(flight -> flightsUtils.flightsMapper(flight,getDollar()))
                 .collect(Collectors.toList());
     }
 }
